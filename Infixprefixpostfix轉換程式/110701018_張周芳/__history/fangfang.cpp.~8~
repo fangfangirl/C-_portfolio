@@ -1,0 +1,445 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "fangfang.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+
+int n;
+char *token;
+String *Stack;
+String *Stack_opn;
+int top = -1;
+int top1 = -1;
+
+char *paring(String e, char *token)//將字串的字存入token之中
+{
+	n = e.Length();
+	token = new char [n];
+	for(int i=1;i<=n;i++)
+	{
+		token[i-1] = e[i];
+    }
+	return token;
+}
+
+int p(String op)
+{
+	if((op == '+') || (op == '-')) return 6;
+	if((op == '*') || (op == '/')) return 7;
+	if((op == '^')) return 8;
+	if((op == '(')) return 9;
+	if((op == '&&')) return 2;
+	if((op == '||')) return 2;
+	if((op == '#')) return -1;
+}
+
+int q(String op)
+{
+	if((op == '+') || (op == '-')) return 6;
+	if((op == '*') || (op == '/')) return 7;
+	if((op == '^')) return 8;
+	if((op == '(')) return 0;
+	if((op == '&&')) return 2;
+	if((op == '||')) return 2;
+	if((op == '#')) return -1;
+}
+
+int ifoperator(String s)
+{
+	if(s=="+") return 1;
+	else if(s=="-") return 1;
+	else if(s=="*") return 1;
+	else if(s=="/") return 1;
+	else if(s=="^") return 1;
+	else if(s=="(") return 1;
+	else if(s==")") return 1;
+	else if(s=="&&") return 1;
+	else if(s=="||") return 1;
+	else if(s=="#") return 1;
+	else return 0;
+}
+
+void push(String data)
+{
+	if(top == n-1)
+		Form1->Memo1->Lines->Add("FULL!!");
+	else
+		Stack[++top] = data;
+}
+
+String pop()
+{
+	if(top==-1)
+		Form1->Memo1->Lines->Add("EMPTY!!");
+	else
+		return Stack[top--];
+}
+
+void push_opn(String data)
+{
+	if(top1 == n-1)
+		Form1->Memo1->Lines->Add("FULL!!");
+	else
+		Stack_opn[++top1] = data;
+}
+
+String pop_opn()
+{
+	if(top1==-1)
+		Form1->Memo1->Lines->Add("EMPTY!!");
+	else
+		return Stack_opn[top1--];
+}
+
+String get_fix(String x2,int flag)
+{
+	String a = pop_opn();
+	String b = pop_opn();
+	a = (flag == 1)? x2+b+a : b+a+x2;
+	return a;
+}
+
+void print_stack()
+{
+	String print1="",print2="";
+	for(int i=top;i!=-1;i--)
+	{
+		print1 =print1+Stack[i]+"  ";
+	}
+	for(int i=top1;i!=-1;i--)
+	{
+		print2 =print2+Stack_opn[i]+"  ";
+	}
+	if(Form1->CheckBox1->Checked)
+	{
+		Form1->Memo1->Lines->Add("Stack 1 : "+print1);
+		Form1->Memo1->Lines->Add("Stack 2 : "+print2);
+	}
+}
+
+String get_allfix(String x,int flag)
+{
+	top = -1;
+    top1 = -1;
+	Stack = new String [n];
+	Stack_opn = new String [n];
+	String s;
+	String x1;
+	push('#');
+	for(int i=0;i<n;i++)
+	{
+		s = token[i];
+		if(ifoperator(s)==0)
+			push_opn(s);
+		else if(s == ")")
+		{
+			while((x1=pop())!="(")
+			{
+				if(flag == 1)
+					push_opn(get_fix(x1,1));
+				else
+					push_opn(get_fix(x1,2));
+			}
+		}
+		else
+		{
+			while(p(s) <= q(Stack[top]))
+			{
+				x1 = pop();
+				if(flag == 1)
+					push_opn(get_fix(x1,1));
+				else
+					push_opn(get_fix(x1,2));
+			}
+			push(s);
+		}
+		print_stack();
+	}
+	while(Stack[top] != '#')
+	{
+		x1=pop();
+		if(flag ==1)
+			push_opn(get_fix(x1,1));
+		else
+			push_opn(get_fix(x1,2));
+		print_stack();
+	}
+	x=pop();
+	print_stack();
+	return pop_opn();
+}
+
+String pretopost(String x)
+{
+	top = -1;
+	String x3,y3,s,x4;
+	Stack = new String [n];
+	push('#');
+	for(int i=0;i<n;i++)
+	{
+		s = token[i];
+		if(ifoperator(s)==0)
+		{
+			while(ifoperator(Stack[top])==0)
+			{
+				y3 = pop();
+				x3 = pop();
+				if((x3 == "#")|| (y3 == "#"))
+					return "wrong!!";
+				s=y3+s+x3;
+			}
+			push(s);
+		}
+		else
+			push(s);
+		print_stack();
+	}
+    if(top > 1)
+		return "wrong!!";
+	x4 = pop();
+    print_stack();
+	return x4;
+}
+
+String posttopre(String x)
+{
+	top = -1;
+	String x5,y5,s,x6;
+	Stack = new String [n];
+	push('#');
+	for(int i=0;i<n;i++)
+	{
+		s = token[i];
+		if(ifoperator(s)==1)
+		{
+			if(ifoperator(Stack[top])==0)
+			{
+				y5 = pop();
+				x5 = pop();
+				if((x5 == "#")|| (y5 == "#"))
+					return "wrong!!";
+				s=s+x5+y5;
+			}
+			push(s);
+		}
+		else
+			push(s);
+		print_stack();
+	}
+	if(top > 1)
+		return "wrong!!";
+	x6 = pop();
+	print_stack();
+	return x6;
+}
+
+String posttoin(String x)
+{
+	top = -1;
+	top1 = -1;
+	String s,s1,s2,x7,y7;
+	Stack = new String [n];
+	Stack_opn = new String [n];
+	for(int i=0;i<n;i++)
+	{
+		s = token[i];
+		if(ifoperator(s)==0)
+		{
+			push_opn(s);
+			push("#");
+		}
+		else
+		{
+			s1=pop();s2=pop();
+			x7=pop_opn();y7=pop_opn();
+			if((p(s)>q(s1)) && x7.Length()>1) x7="("+x7+")";
+			if((p(s)>q(s2)) && y7.Length()>1) y7="("+y7+")";
+			push_opn(y7+s+x7);
+			push(s);
+		}
+		print_stack();
+	}
+	while(top != -1)
+	{
+		x7 = pop();
+		print_stack();
+	}
+	return pop_opn();
+}
+
+String pretoin(String x)
+{
+	top = -1;
+	top1 = -1;
+	String s,s1,s2,x8,y8;
+	Stack = new String [n];
+	Stack_opn = new String [n];
+	for(int i=n-1;i>=0;i--)
+	{
+		s = token[i];
+		if(ifoperator(s)==0)
+		{
+			push_opn(s);
+			push("#");
+		}
+		else
+		{
+			s1=pop();s2=pop();
+			x8=pop_opn();y8=pop_opn();
+			if((p(s)>q(s1)) && x8.Length()>1) x8="("+x8+")";
+			if((p(s)>q(s2)) && y8.Length()>1) y8="("+y8+")";
+			push_opn(x8+s+y8);
+			push(s);
+		}
+		print_stack();
+	}
+	while(top != -1)
+	{
+		x8 = pop();
+		print_stack();
+    }
+	return pop_opn();
+}
+
+
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+	: TForm(Owner)
+{
+	ComboBox1->Items->Add("A/B-(C+D)*E+A*C");
+	ComboBox1->Items->Add("(A+B)*C^D");
+	ComboBox1->Items->Add("(A+B*C)*D");
+	ComboBox1->Items->Add("B+(S+F)*R+G^K");
+	ComboBox2->Items->Add("+-/AB*+CDE*AC");
+	ComboBox2->Items->Add("*+AB^CD");
+	ComboBox2->Items->Add("*+A*BCD");
+	ComboBox2->Items->Add("++B*+SFR^GK");
+	ComboBox3->Items->Add("A/B-(C+D)*E+A*C");
+	ComboBox3->Items->Add("AB+CD^*");
+	ComboBox3->Items->Add("ABC*+D*");
+	ComboBox3->Items->Add("BSF+R*+GK^+");
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+	if(Form1->CheckBox2->Checked)
+		Form1->Memo1->Clear();
+	String e = Edit1->Text;
+	String all = "infix :     ";
+	token = paring(e,token);
+	String x="";
+	x = get_allfix(x,2);
+	for(int i=0;i<n;i++)
+		all=all+token[i];
+	Form1->Memo1->Lines->Add(all);
+	Form1->Memo1->Lines->Add("postfix : "+x);
+	Edit2->Text = x;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+	if(Form1->CheckBox2->Checked)
+		Form1->Memo1->Clear();
+	String e = Edit1->Text;
+	token = paring(e,token);
+	String all = "infix :   ";
+	String y="";
+	y = get_allfix(y,1);
+	for(int i=0;i<n;i++)
+		all=all+token[i];
+	Form1->Memo1->Lines->Add(all);
+	Form1->Memo1->Lines->Add("prefix : "+y);
+	Edit3->Text = y;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button3Click(TObject *Sender)
+{
+	if(Form1->CheckBox2->Checked)
+		Form1->Memo1->Clear();
+	String e = Edit4->Text;
+	String all = "prefix :   ";
+	token = paring(e,token);
+	String x="";
+	x = pretopost(x);
+	for(int i=0;i<n;i++)
+		all=all+token[i];
+	Form1->Memo1->Lines->Add(all);
+	Form1->Memo1->Lines->Add("postfix : "+x);
+	Edit5->Text = x;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button4Click(TObject *Sender)
+{
+	if(Form1->CheckBox2->Checked)
+		Form1->Memo1->Clear();
+	String e = Edit4->Text;
+	String all = "prefix :";
+	token = paring(e,token);
+	String y="";
+	y = pretoin(y);
+	for(int i=0;i<n;i++)
+		all=all+token[i];
+	Form1->Memo1->Lines->Add(all);
+	Form1->Memo1->Lines->Add("infix :  "+y);
+	Edit6->Text = y;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button5Click(TObject *Sender)
+{
+	if(Form1->CheckBox2->Checked)
+		Form1->Memo1->Clear();
+	String e = Edit7->Text;
+	String all = "postfix :   ";
+	token = paring(e,token);
+	String x="";
+	x = posttopre(x);
+	for(int i=0;i<n;i++)
+		all=all+token[i];
+	Form1->Memo1->Lines->Add(all);
+	Form1->Memo1->Lines->Add("prefix : "+x);
+	Edit8->Text = x;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button6Click(TObject *Sender)
+{
+	if(Form1->CheckBox2->Checked)
+		Form1->Memo1->Clear();
+	String e = Edit7->Text;
+	String all = "postfix :";
+	token = paring(e,token);
+	String y="";
+	y = posttoin(y);
+	for(int i=0;i<n;i++)
+		all=all+token[i];
+	Form1->Memo1->Lines->Add(all);
+	Form1->Memo1->Lines->Add("infix :    "+y);
+	Edit9->Text = y;
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TForm1::Button7Click(TObject *Sender)
+{
+	Edit2->Text = "";
+	Edit3->Text = "";
+	Edit5->Text = "";
+	Edit6->Text = "";
+	Edit8->Text = "";
+	Edit9->Text = "";
+    Memo1->Clear();
+}
+//---------------------------------------------------------------------------
+

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2023/03/31 14:07:43.000.013,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2023/03/31 14:07:43.000.410,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>2023/04/10 22:09:46.000.631,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2023/04/10 22:09:47.000.009,=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>2023/04/10 22:10:17.000.501,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Unit1.cpp=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.cpp</Transaction>
+    <Transaction>2023/04/10 22:10:17.000.501,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Unit1.dfm=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2023/04/10 22:10:17.000.501,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Unit1.h=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Unit1.h</Transaction>
+    <Transaction>2023/04/10 22:10:19.000.052,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Project1PCH1.h=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1PCH1.h</Transaction>
+    <Transaction>2023/04/10 22:10:19.000.955,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Project1.cbproj=C:\Users\USER\Documents\Embarcadero\Studio\Projects\Project1.cbproj</Transaction>
+    <Transaction>2023/04/15 02:25:13.801,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\fangfang.dfm=C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Unit1.dfm</Transaction>
+    <Transaction>2023/04/15 02:25:13.801,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\fangfang.cpp=C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Unit1.cpp</Transaction>
+    <Transaction>2023/04/15 02:25:13.801,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\fangfang.h=C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Unit1.h</Transaction>
+    <Transaction>2023/04/15 02:26:07.794,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\110701018_張周芳PCH1.h=C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Project1PCH1.h</Transaction>
+    <Transaction>2023/04/15 02:26:07.838,C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\110701018_張周芳.cbproj=C:\Users\USER\Documents\大二\大二下\資料結構\作業\110701018_張周芳_HW4\Project1.cbproj</Transaction>
+  </Transactions>
+</BorlandProject>
